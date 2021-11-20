@@ -12,5 +12,6 @@ class Comment(models.Model):
     has_replied = models.BooleanField(default=False)
     replied_id = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_ban = models.BooleanField(default=False)
 
 

@@ -3,5 +3,6 @@ from report.views import ReportView
 from django.conf.urls import url, include
 
 urlpatterns = [
-    path('<int:post>/report/', ReportView.as_view())
+    path('<int:entity>/<int:entity_type>/<int:reason_type>/', ReportView.as_view())
 ]
+

@@ -46,7 +46,6 @@ class CommentDetailView(APIView):
     # get reply's of comment
     def get(self, request, post, comment):
         records = Comment.objects.filter(post__id=post, replied_id=comment)
-        print(records)
         if records:
             serializer = CommentSerializer(records, many=True)
             return Response({

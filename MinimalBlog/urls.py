@@ -21,9 +21,9 @@ from django.conf.urls import url, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('example.urls')),
-    path('blog/', include('blog.urls')),
+    path('users/', include('blog.urls')),
     path('posts/', include('comment.urls')),
     path('posts/', include('like.urls')),
-    path('posts/', include('report.urls')),
+    path('report/', include('report.urls')),
 
 ]

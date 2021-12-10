@@ -1,6 +1,6 @@
 from django.urls import path
 from blog.views import PostView, PostDetailView
-from django.conf.urls import url, include
+from django.conf.urls import include
 
 urlpatterns = [
     path('posts/', PostView.as_view()),

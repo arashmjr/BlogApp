@@ -7,3 +7,4 @@ urlpatterns = [
     path('<int:post>/likes/', LikeListView.as_view()),
 
 ]
+

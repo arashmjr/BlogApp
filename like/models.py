@@ -1,5 +1,5 @@
 from django.db import models
-from blog.models import Post
+from post.models import Post
 from example.models import User
 import datetime
 

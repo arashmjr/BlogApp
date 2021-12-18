@@ -2,9 +2,8 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from blog.models import Post
-from example.models import User
-from blog.serializer import PostSerializer
+from post.models import Post
+from post.serializer import PostSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import permission_classes
 
@@ -13,7 +12,7 @@ class PostView(APIView):  # [GET, POST, DELETE]
 
     def get(self, request):
         user = request.user.id
-        # get list of post
+        # get user posts
         records = Post.objects.filter(author=user, is_ban=False)
         if records:
             serializer = PostSerializer(records, many=True)
@@ -41,6 +40,7 @@ class PostView(APIView):  # [GET, POST, DELETE]
                         }, status=status.HTTP_400_BAD_REQUEST)
 
     # remove all posts of user
+    # remove user posts
     def delete(self, request):
         records = Post.objects.filter(author=request.user)
         if records:
@@ -82,7 +82,7 @@ class PostDetailView(APIView):  # [GET, PUT, DELETE]
                 serializer.save()
                 return Response({"data": serializer.data,
                                 "success": True,
-                                }, status=status.HTTP_200_OK)
+                                 }, status=status.HTTP_200_OK)
 
             return Response({"data": serializer.errors,
                              "success": False,

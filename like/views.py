@@ -11,20 +11,12 @@ from rest_framework.decorators import permission_classes
 class LikeListView(APIView):
     # return count of like
     def get(self, request, post):
-        records = Like.objects.filter(post=post, is_deleted=False)
-        serializer = LikeSerializer(records, many=True)
-        if records:
-            count = len(serializer.data)
-            return Response({
-                "data": serializer.data,
-                "message": f"number of like for this post: {count}",
-                "success": True
-            }, status=status.HTTP_200_OK)
+        count = Like.objects.filter(post=post, is_deleted=False).count()
         return Response({
-            "data": None,
-            "message": "this post does not exist",
-            "success": False
-        }, status=status.HTTP_204_NO_CONTENT)
+            "data": count,
+            "message": '',
+            "success": True
+        }, status=status.HTTP_200_OK)
 
 
 class LikeDetailView(APIView):
@@ -37,7 +29,7 @@ class LikeDetailView(APIView):
             serializer = LikeSerializer(record)
             return Response({
                 "data": serializer.data,
-                "message": f"This post was liked by user with user_id {user_id} ",
+                "message": f"This post was liked by user with user_id {user_id}",
                 "success": True
             }, status=status.HTTP_200_OK)
         return Response({

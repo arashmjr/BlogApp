@@ -1,9 +1,13 @@
 from django.contrib import admin
-from report.models import Report
+from report.models import ReportPost, ReportComment
 
 
-@admin.register(Report)
-class ReportAdmin(admin.ModelAdmin):
-    list_display = ('id', 'reporter_user', 'entity_id', 'entity_type', 'reason_type')
+@admin.register(ReportPost)
+class ReportPostAdmin(admin.ModelAdmin):
+    list_display = ('id', 'reporter_user', 'post', 'reason_type')
 
+
+@admin.register(ReportComment)
+class ReportCommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'reporter_user', 'comment', 'reason_type')
 

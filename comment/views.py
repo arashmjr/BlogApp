@@ -98,6 +98,7 @@ class CommentDetailView(APIView):
 
         if Comment.objects.filter(id=comment, post__author=request.user).exists():
             record = Comment.objects.filter(id=comment, post__author=request.user).last()
+            print(record)
             record.is_verified = True
             record.save()
             return Response({"data": '',
@@ -106,7 +107,7 @@ class CommentDetailView(APIView):
                              }, status=status.HTTP_200_OK)
         return Response({
                 "data": '',
-                "message": "error in process",
+                "message": "record not found",
                 "success": False
             }, status=status.HTTP_204_NO_CONTENT)
 

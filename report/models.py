@@ -1,19 +1,16 @@
 from django.db import models
-from post.models import Post
 from example.models import User
-from comment.models import Comment
+import uuid
 
 
-class ReportPost(models.Model):
+class Report(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     reporter_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    entity_id = models.UUIDField()
     reason_type = models.IntegerField()
 
 
-class ReportComment(models.Model):
-    reporter_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    reason_type = models.IntegerField()
 
 
 

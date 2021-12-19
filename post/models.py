@@ -2,9 +2,11 @@ from django.db import models
 import datetime
 from example.models import User
 from django.utils import timezone
+import uuid
 
 
 class Post(models.Model):
+    id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False)
     post_title = models.CharField(max_length=40)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField(blank=False)

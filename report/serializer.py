@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from report.models import ReportPost, ReportComment
+from report.models import Report
 from rest_framework.serializers import ValidationError
 from post.models import Post
 from comment.models import Comment
 
 
-class ReportPostSerializer(serializers.ModelSerializer):
+class ReportSerializer(serializers.ModelSerializer):
 
     def validate_reason_type(self, reason_type):
         if reason_type >= 5:
@@ -13,19 +13,19 @@ class ReportPostSerializer(serializers.ModelSerializer):
         return reason_type
 
     class Meta:
-        model = ReportPost
+        model = Report
         fields = "__all__"
 
 
-class ReportCommentSerializer(serializers.ModelSerializer):
-
-    def validate_reason_type(self, reason_type):
-        if reason_type >= 5:
-            raise ValidationError("reason_type out of range")
-
-    class Meta:
-        model = ReportComment
-        fields = ('reporter_user', 'comment', 'reason_type')
+# class ReportCommentSerializer(serializers.ModelSerializer):
+#
+#     def validate_reason_type(self, reason_type):
+#         if reason_type >= 5:
+#             raise ValidationError("reason_type out of range")
+#
+#     class Meta:
+#         model = ReportComment
+#         fields = ('reporter_user', 'comment', 'reason_type')
 
 
 

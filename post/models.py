@@ -1,7 +1,5 @@
 from django.db import models
-import datetime
 from example.models import User
-from django.utils import timezone
 import uuid
 
 

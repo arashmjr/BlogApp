@@ -7,36 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import permission_classes
 
 
-@permission_classes((AllowAny,))
-class LikeListView(APIView):
-    # return count of like
-    def get(self, request, post):
-        count = Like.objects.filter(post=post, is_deleted=False).count()
-        return Response({
-            "data": count,
-            "message": '',
-            "success": True
-        }, status=status.HTTP_200_OK)
-
-
 class LikeDetailView(APIView):
-    # show desired post is like or not
-    def get(self, request, post):
-        user_id = request.user.id
-
-        record = Like.objects.filter(user=user_id, post=post, is_deleted=False).first()
-        if record:
-            serializer = LikeSerializer(record)
-            return Response({
-                "data": serializer.data,
-                "message": f"This post was liked by user with user_id {user_id}",
-                "success": True
-            }, status=status.HTTP_200_OK)
-        return Response({
-            "data": None,
-            "message": "This post does not like by user",
-            "success": False
-        }, status=status.HTTP_200_OK)
 
     def post(self, request, post):
         user_id = request.user.id

@@ -22,7 +22,6 @@ class PostView(APIView):  # [GET, POST, DELETE]
                              "message": "There is no post for this user",
                              "success": False,
                              }, status=status.HTTP_204_NO_CONTENT)
-        print(Post.objects.filter(author=user, is_ban=False))
         data = []
         for item in Post.objects.filter(author=user, is_ban=False):
             count_likes = Like.objects.filter(post=item.id, is_deleted=False).count()
@@ -44,31 +43,31 @@ class PostView(APIView):  # [GET, POST, DELETE]
         author = request.user.id
         request.data['author'] = author
         serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"data": serializer.data,
-                             "success": True
-                             }, status=status.HTTP_201_CREATED)
-        return Response({"data": 'serializer.errors',
-                        "success": False,
-                         }, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            return Response({"data": 'serializer.errors',
+                             "success": False,
+                             }, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response({"data": serializer.data,
+                         "success": True
+                         }, status=status.HTTP_201_CREATED)
 
     # remove user posts
     def delete(self, request):
-        records = Post.objects.filter(author=request.user)
-        if records:
-            records.delete()
+        if not Post.objects.filter(author=request.user).exists():
             return Response({
                 "data": None,
-                "message": "your posts are deleted.",
-                "success": True
-            }, status=status.HTTP_200_OK)
+                "message": "you have no post.",
+                "success": False
+            }, status=status.HTTP_204_NO_CONTENT)
 
+        Post.objects.filter(author=request.user).delete()
         return Response({
             "data": None,
-            "message": "you have no post.",
-            "success": False
-        }, status=status.HTTP_204_NO_CONTENT)
+            "message": "your posts are deleted.",
+            "success": True
+        }, status=status.HTTP_200_OK)
 
 
 class PostDetailView(APIView):  # [GET, PUT, DELETE]
@@ -99,38 +98,37 @@ class PostDetailView(APIView):  # [GET, PUT, DELETE]
 
     def put(self, request, post):
         request.data['author'] = request.user.id
-        if Post.objects.filter(id=post, author=request.user, is_ban=False).exists():
-            record = Post.objects.filter(id=post, author=request.user, is_ban=False).last()
-            serializer = PostSerializer(record, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({"data": serializer.data,
-                                "success": True,
-                                 }, status=status.HTTP_200_OK)
-
+        if not Post.objects.filter(id=post, author=request.user, is_ban=False).exists():
+            return Response({"data": '',
+                             "message": "this post is not exist",
+                             "success": False,
+                             }, status=status.HTTP_204_NO_CONTENT)
+        record = Post.objects.filter(id=post, author=request.user, is_ban=False).last()
+        serializer = PostSerializer(record, data=request.data)
+        if not serializer.is_valid():
             return Response({"data": serializer.errors,
                              "success": False,
                              }, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"data": '',
-                         "message": "this post is not exist",
-                         "success": False,
-                         }, status=status.HTTP_204_NO_CONTENT)
+
+        serializer.save()
+        return Response({"data": serializer.data,
+                         "success": True,
+                         }, status=status.HTTP_200_OK)
 
     def delete(self, request, post):
-        record = Post.objects.filter(pk=post, author=request.user).first()
-        if record:
-            record.delete()
+        if not Post.objects.filter(pk=post, author=request.user).exists():
             return Response({
                 "data": None,
-                "message": "your post is deleted.",
-                "success": True
-            }, status=status.HTTP_200_OK)
+                "message": "your post does not exist.",
+                "success": False
+            }, status=status.HTTP_204_NO_CONTENT)
 
+        Post.objects.filter(pk=post, author=request.user).delete()
         return Response({
             "data": None,
-            "message": "your post does not exist.",
-            "success": False
-        }, status=status.HTTP_204_NO_CONTENT)
+            "message": "your post is deleted.",
+            "success": True
+        }, status=status.HTTP_200_OK)
 
 
 class HomePagePostView(APIView):
@@ -157,4 +155,3 @@ class HomePagePostView(APIView):
             "data": str(data),
             "message": "success"},
             status=status.HTTP_200_OK)
-

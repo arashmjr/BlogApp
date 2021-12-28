@@ -11,7 +11,7 @@ class Comment(models.Model):
     content = models.TextField(blank=False)
     is_verified = models.BooleanField(default=False)
     has_replied = models.BooleanField(default=False)
-    replied_id = models.IntegerField(null=True)
+    replied_id = models.UUIDField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_ban = models.BooleanField(default=False)
 

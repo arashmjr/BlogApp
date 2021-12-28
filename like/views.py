@@ -11,7 +11,6 @@ class LikeDetailView(APIView):
 
     def post(self, request, post):
         user_id = request.user.id
-
         document = Like.objects.filter(post=post, user=user_id).first()
 
         if document:
@@ -47,18 +46,20 @@ class LikeDetailView(APIView):
     def delete(self, request, post):
 
         record = Like.objects.filter(post=post, user=request.user.id).first()
-        if record:
-            record.is_deleted = True
-            record.save()
+        if not record:
             return Response({
                 "data": None,
-                "message": "your like is deleted.",
-                "success": True
-            }, status=status.HTTP_200_OK)
+                "message": "error in process",
+                "success": False
+            }, status=status.HTTP_204_NO_CONTENT)
 
+        record.is_deleted = True
+        record.save()
         return Response({
             "data": None,
-            "message": "error in process",
-            "success": False
-        }, status=status.HTTP_204_NO_CONTENT)
+            "message": "your like is deleted.",
+            "success": True
+        }, status=status.HTTP_200_OK)
+
+
 

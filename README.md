@@ -19,8 +19,6 @@ source venv/bin/activate # If You're On A Linux
 
 pip install -r requirements.txt
 
-configuration of  sqlite using the following sections 
-
 python manage.py makemigrations
  
 python manage.py migrate  # Create database tables
